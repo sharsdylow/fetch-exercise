@@ -38,10 +38,20 @@ def health_check(endpoint):
                 body = json.loads(body)
             except:
                 pass
-        
-        res = requests.request(method=method, url=url, headers=headers, json=body)
+
+        res = requests.request(
+            method=method,
+            url=url,
+            headers=headers,
+            json=body if headers.get("content-type") == "application/json" else None,
+            data=body if headers.get("content-type") != "application/json" else None,
+            timeout=10,
+        )
         return domain, res.status_code in range(200, 300)
-        
+
+    except requests.Timeout:
+        print(f"Timeout error checking {name} ({url})")
+        return domain, False
     except requests.RequestException as e:
         print(f"Error checking {name}: {str(e)}")
         return domain, False
@@ -55,10 +65,17 @@ def check_cycle(endpoints):
 
         results[domain]['total'] += 1
         if success:
-            results[domain]['up'] += 1
-    for domain, result in results.items():
-        availability = round(result['up'] / result['total'] * 100)
-        print(domain, ' has', availability, '% availability percentage')
+            results[domain]["up"] += 1
+
+    # print result
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"\nHealth Check Results (Last Updated: {current_time}):")
+    print("-" * 50)
+
+    for domain, result in sorted(results.items()):
+        availability = round(result["up"] / result["total"] * 100)
+        print(f"{domain} has {availability}% availability percentage")
+
 
 def main():
     # Set up argument parser
