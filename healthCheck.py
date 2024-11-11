@@ -54,8 +54,8 @@ def health_check(endpoint):
     except requests.Timeout:
         print(f"Timeout error checking {name} ({url})")
         return domain, False
-    except requests.RequestException as e:
-        print(f"Error checking {name}: {str(e)}")
+    except Exception as e:
+        print(f"Unexpected error checking {name} ({url}): {str(e)}")
         return domain, False
 
 
@@ -75,7 +75,7 @@ def check_cycle(endpoints):
     print(f"\nHealth Check Results (Last Updated: {current_time}):")
     print("-" * 50)
 
-    for domain, result in sorted(results.items()):
+    for domain, result in results.items():
         availability = round(result["up"] / result["total"] * 100)
         print(f"{domain} has {availability}% availability percentage")
 
@@ -110,8 +110,9 @@ def main():
     second = args.second if args.second else 15
     schedule.every(second).seconds.do(check_cycle, endpoints=endpoints)
 
-    print(f"\nStarting health check monitor (checking every {args.second} seconds)")
+    print(f"\nStarting health check monitor (checking every {second} seconds)")
     print("Press Ctrl+C to exit")
+
     # Run initial check immediately
     schedule.run_all()
 
