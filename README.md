@@ -2,7 +2,8 @@
 
 This is the solution for Fetch's SRE take home exercise that implements a continuous health check monitoring system for web endpoints.
 
-# Install Requirements
+## Running Locally
+### Install Requirements
 
 Python 3.6 or higher is required. Install the required packages using:
 
@@ -10,9 +11,9 @@ Python 3.6 or higher is required. Install the required packages using:
 pip install -r requirements.txt
 ```
 
-# Usage
+### Usage
 
-### Command Line Interface
+#### Command Line Interface
 
 Run the monitor with command-line arguments:
 

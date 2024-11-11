@@ -1,0 +1,103 @@
+# Basic GET requests
+- name: fetch home page
+  url: https://fetch.com
+  method: GET
+  headers:
+    user-agent: fetch-synthetic-monitor
+
+- name: fetch careers page
+  url: https://fetch.com/careers
+  headers:
+    user-agent: fetch-synthetic-monitor
+    accept-language: en-US
+
+# HTTPS API endpoints with authentication
+- name: github api test
+  url: https://api.github.com/zen
+  method: GET
+  headers:
+    user-agent: fetch-synthetic-monitor
+    accept: application/vnd.github.v3+json
+
+- name: httpbin get test
+  url: https://httpbin.org/get
+  method: GET
+  headers:
+    user-agent: fetch-synthetic-monitor
+    accept: application/json
+
+# POST requests with JSON bodies
+- name: httpbin post test
+  url: https://httpbin.org/post
+  method: POST
+  headers:
+    user-agent: fetch-synthetic-monitor
+    content-type: application/json
+    accept: application/json
+  body: '{"test": "data", "source": "fetch-monitor"}'
+
+- name: httpbin complex post
+  url: https://httpbin.org/post
+  method: POST
+  headers:
+    user-agent: fetch-synthetic-monitor
+    content-type: application/json
+    accept: application/json
+  body: '{
+      "string": "Hello World",
+      "number": 42,
+      "array": [1, 2, 3],
+      "object": {
+        "key1": "value1",
+        "key2": true,
+        "key3": null
+      }
+    }'
+
+# Testing different HTTP methods
+- name: httpbin put test
+  url: https://httpbin.org/put
+  method: PUT
+  headers:
+    user-agent: fetch-synthetic-monitor
+    content-type: application/json
+  body: '{"update": true}'
+
+- name: httpbin delete test
+  url: https://httpbin.org/delete
+  method: DELETE
+  headers:
+    user-agent: fetch-synthetic-monitor
+
+# Testing response codes
+- name: httpbin 404 test
+  url: https://httpbin.org/status/404
+  method: GET
+  headers:
+    user-agent: fetch-synthetic-monitor
+
+- name: httpbin 500 test
+  url: https://httpbin.org/status/500
+  method: GET
+  headers:
+    user-agent: fetch-synthetic-monitor
+
+# Testing timeouts
+- name: httpbin delay test
+  url: https://httpbin.org/delay/5
+  method: GET
+  headers:
+    user-agent: fetch-synthetic-monitor
+
+# Testing different domains
+- name: mozilla developer network
+  url: https://developer.mozilla.org/en-US/
+  method: GET
+  headers:
+    user-agent: fetch-synthetic-monitor
+
+- name: fetch rewards site
+  url: https://www.fetchrewards.com
+  method: GET
+  headers:
+    user-agent: fetch-synthetic-monitor
