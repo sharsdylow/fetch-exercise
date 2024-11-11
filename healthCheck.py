@@ -47,7 +47,6 @@ def health_check(endpoint):
         return domain, False
 
 def check_cycle(endpoints):
-    print('cycle:')
     for endpoint in endpoints:
         domain, success = health_check(endpoint)
 
@@ -57,7 +56,6 @@ def check_cycle(endpoints):
         results[domain]['total'] += 1
         if success:
             results[domain]['up'] += 1
-    print(results)
     for domain, result in results.items():
         availability = round(result['up'] / result['total'] * 100)
         print(domain, ' has', availability, '% availability percentage')
@@ -66,7 +64,7 @@ def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Health check endpoints defined in a YAML file')
     parser.add_argument('-c', dest='file_path', help='Path to the YAML config file containing endpoint definitions', required=False)
-    parser.add_argument('-s', dest='second', help='Health check test cycle length (second)', required=False)
+    parser.add_argument('-s', dest='second', help='Health check test cycle length (default 15 seconds)', required=False)
     args = parser.parse_args()
 
     file_path = args.file_path if args.file_path else input('Please input config file path:\n')
@@ -74,16 +72,20 @@ def main():
     if(not endpoints):
         print('No endpoint in content...')
         sys.exit(1)
-    
-    schedule.every(15).seconds.do(check_cycle, endpoints=endpoints)
+
+    second = args.second if args.second else 15
+    schedule.every(second).seconds.do(check_cycle, endpoints=endpoints)
     schedule.run_all()
-    
+
     while True:
         schedule.run_pending()
         time.sleep(1)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('\nexit the program...')
 
 
 
